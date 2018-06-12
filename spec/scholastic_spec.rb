@@ -5,7 +5,7 @@ require_relative '../utils/json_utilities.rb'
 require_relative '../services/auth_service.rb'
 require_relative '../services/admin_service.rb'
 
-describe('Scholastics Spec') do
+describe('Scholastic Spec') do
 
   user_keys = %w[icon img info lang name, order, id]
 
@@ -299,7 +299,7 @@ describe('Scholastics Spec') do
     res = JSON.parse(response.body)
 
     expect(
-      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
   end
 
@@ -315,7 +315,7 @@ describe('Scholastics Spec') do
     res = JSON.parse(response.body)
 
     expect(
-      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
   end
 
@@ -332,7 +332,7 @@ describe('Scholastics Spec') do
     res = JSON.parse(response.body)
 
     expect(
-      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
   end
 

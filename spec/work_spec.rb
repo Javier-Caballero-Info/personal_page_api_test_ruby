@@ -299,7 +299,7 @@ describe('Works Spec') do
     res = JSON.parse(response.body)
 
     expect(
-      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
   end
 
@@ -315,7 +315,7 @@ describe('Works Spec') do
     res = JSON.parse(response.body)
 
     expect(
-      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
   end
 
@@ -332,7 +332,7 @@ describe('Works Spec') do
     res = JSON.parse(response.body)
 
     expect(
-      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
   end
 

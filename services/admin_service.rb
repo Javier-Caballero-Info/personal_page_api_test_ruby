@@ -30,6 +30,10 @@ module AdminService
     "/%s/scholastic" % lang
   end
 
+  def self.social_network_path(lang)
+    "/%s/social-networks" % lang
+  end
+
   def self.work_path(lang)
     "/%s/works" % lang
   end
