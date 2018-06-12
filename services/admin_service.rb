@@ -18,4 +18,8 @@ module AdminService
     "/%s/contacts" % lang
   end
 
+  def self.work_path(lang)
+    "/%s/works" % lang
+  end
+
 end
