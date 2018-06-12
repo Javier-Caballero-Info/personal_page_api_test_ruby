@@ -18,9 +18,11 @@ module AdminService
     "/%s/contacts" % lang
   end
 
-
   def self.education_path(lang)
     "/%s/educations" % lang
+  end
+  def self.research_path(lang)
+    "/%s/researches" % lang
   end
 
   def self.work_path(lang)
