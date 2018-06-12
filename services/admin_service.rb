@@ -21,8 +21,13 @@ module AdminService
   def self.education_path(lang)
     "/%s/educations" % lang
   end
+
   def self.research_path(lang)
     "/%s/researches" % lang
+  end
+
+  def self.scholastic_path(lang)
+    "/%s/scholastic" % lang
   end
 
   def self.work_path(lang)

@@ -5,31 +5,31 @@ require_relative '../utils/json_utilities.rb'
 require_relative '../services/auth_service.rb'
 require_relative '../services/admin_service.rb'
 
-describe('Scholastics Spec') do
+describe('Researchs Spec') do
 
   user_keys = %w[icon img info lang name, order, id]
 
-  data_req_new_scholastic = {
-    description: 'Ayudante de Cátedra de 2da Ad-Honorem',
-    institute: 'Universidad Tecnológica Nacional-Facultad Regional Mendoza',
-    subject: 'Ingeniería en Sistemas de Información-Sistemas de Representación',
-    time: 'Marzo 2014 - Actualidad',
+  data_req_new_research = {
+    description: 'Desarrollo del marco teórico, representación en congresos, e implementación del sistema.',
+    group: 'Laboratorio de Auditoría y Seguridad en TIC',
+    project: 'Metamodelado de Auditoría y Reingeniería para Sistemas de Trazabilidad de Vinos',
+    time: 'Enero 2016 - Actualidad',
     order: 2
   }
 
-  data_req_edit_scholastic = {
-    description: 'Ayudante de Cátedra de 2da Ad-Honorem',
-    institute: 'Universidad Tecnológica Nacional-Facultad Regional Mendoza',
-    subject: 'Ingeniería en Sistemas de Información-Paradigmas de Programación',
-    time: 'Julio 2012 - Julio 2013',
+  data_req_edit_research = {
+    description: 'Definición de algoritmos para la implementación de técnicas de testing formal.',
+    group: 'Laboratorio de Auditoría y Seguridad en TIC',
+    project: 'Calidad de Software',
+    time: 'Marzo 2014 - Diciembre 2015',
     order: 1
   }
 
   not_found_resp = {
-    error: 'Scholastic not found.'
+    error: 'Research not found.'
   }
 
-  scholastic_id = ''
+  research_id = ''
 
   lang = AdminService.random_lang
   path = ''
@@ -37,11 +37,11 @@ describe('Scholastics Spec') do
 
   before(:all) do
     AuthService.login_with_default_user
-    path = AdminService.scholastic_path lang
+    path = AdminService.research_path lang
     base_path = AdminService.base_path
   end
 
-  it 'Get all scholastics (Auth)' do
+  it 'Get all researchs (Auth)' do
 
     response = ApiRequest.create_get_request(
       base_path,
@@ -63,7 +63,7 @@ describe('Scholastics Spec') do
 
   end
 
-  it 'Get all scholastics (No Auth)' do
+  it 'Get all researchs (No Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
       path,
@@ -77,11 +77,11 @@ describe('Scholastics Spec') do
     expect(res['message']).to eq 'No token provided.'
   end
 
-  it 'Create a scholastic (Auth)' do
+  it 'Create a research (Auth)' do
     response = ApiRequest.create_post_request(
       base_path,
       path,
-      data_req_new_scholastic,
+      data_req_new_research,
       AuthService.auth_access_token
     )
 
@@ -95,24 +95,24 @@ describe('Scholastics Spec') do
 
     expect(data.has_key?('id')).to eq true
 
-    data_res_new_scholastic = data_req_new_scholastic.clone
+    data_res_new_research = data_req_new_research.clone
 
-    scholastic_id = data['id']
+    research_id = data['id']
 
-    data_res_new_scholastic['id'] = scholastic_id
+    data_res_new_research['id'] = research_id
 
-    data_res_new_scholastic['lang'] = lang.to_s.upcase
+    data_res_new_research['lang'] = lang.to_s.upcase
 
     expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_scholastic.to_json)
+      data.to_json, data_res_new_research.to_json)
     ).to eq true
   end
 
-  it 'Create a scholastic (No Auth)' do
+  it 'Create a research (No Auth)' do
     response = ApiRequest.create_post_request(
       base_path,
       path,
-      data_req_new_scholastic,
+      data_req_new_research,
       nil
     )
 
@@ -124,10 +124,10 @@ describe('Scholastics Spec') do
 
   end
 
-  it 'Get a scholastic (Auth)' do
+  it 'Get a research (Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       AuthService.auth_access_token
     )
 
@@ -141,21 +141,21 @@ describe('Scholastics Spec') do
 
     expect(data.has_key?('id')).to eq true
 
-    data_res_new_scholastic = data_req_new_scholastic.clone
+    data_res_new_research = data_req_new_research.clone
 
-    data_res_new_scholastic['id'] = scholastic_id
+    data_res_new_research['id'] = research_id
 
-    data_res_new_scholastic['lang'] = lang.to_s.upcase
+    data_res_new_research['lang'] = lang.to_s.upcase
 
     expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_scholastic.to_json)
+      data.to_json, data_res_new_research.to_json)
     ).to eq true
   end
 
-  it 'Get a scholastic (No Auth)' do
+  it 'Get a research (No Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       nil
     )
 
@@ -169,8 +169,8 @@ describe('Scholastics Spec') do
   it 'Edit an user (Auth)' do
     response = ApiRequest.create_put_request(
       base_path,
-      path + '/' + scholastic_id,
-      data_req_edit_scholastic,
+      path + '/' + research_id,
+      data_req_edit_research,
       AuthService.auth_access_token
     )
 
@@ -182,9 +182,9 @@ describe('Scholastics Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_scholastic.clone
+    data_res_edit_user_res = data_req_edit_research.clone
 
-    data_res_edit_user_res['id'] = scholastic_id
+    data_res_edit_user_res['id'] = research_id
 
     data_res_edit_user_res['lang'] = lang.to_s.upcase
 
@@ -193,10 +193,10 @@ describe('Scholastics Spec') do
     ).to eq true
   end
 
-  it 'Get an edited scholastic (Auth)' do
+  it 'Get an edited research (Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       AuthService.auth_access_token
     )
 
@@ -208,9 +208,9 @@ describe('Scholastics Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_scholastic.clone
+    data_res_edit_user_res = data_req_edit_research.clone
 
-    data_res_edit_user_res['id'] = scholastic_id
+    data_res_edit_user_res['id'] = research_id
 
     data_res_edit_user_res['lang'] = lang.to_s.upcase
 
@@ -222,8 +222,8 @@ describe('Scholastics Spec') do
   it 'Edit an user (No Auth)' do
     response = ApiRequest.create_put_request(
       base_path,
-      path + '/' + scholastic_id,
-      data_req_edit_scholastic,
+      path + '/' + research_id,
+      data_req_edit_research,
       nil
     )
 
@@ -235,10 +235,10 @@ describe('Scholastics Spec') do
 
   end
 
-  it 'Get a scholastic (Auth)' do
+  it 'Get a research (Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       AuthService.auth_access_token
     )
 
@@ -252,21 +252,21 @@ describe('Scholastics Spec') do
 
     expect(data.has_key?('id')).to eq true
 
-    data_res_edit_scholastic = data_req_edit_scholastic.clone
+    data_res_edit_research = data_req_edit_research.clone
 
-    data_res_edit_scholastic['id'] = scholastic_id
+    data_res_edit_research['id'] = research_id
 
-    data_res_edit_scholastic['lang'] = lang.to_s.upcase
+    data_res_edit_research['lang'] = lang.to_s.upcase
 
     expect(JsonUtilities.compare_json(
       data.to_json, data.to_json)
     ).to eq true
   end
 
-  it 'Delete an scholastic (No Auth)' do
+  it 'Delete an research (No Auth)' do
     response = ApiRequest.create_delete_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       nil
     )
 
@@ -277,20 +277,20 @@ describe('Scholastics Spec') do
     expect(res['message']).to eq 'No token provided.'
   end
 
-  it 'Delete an scholastic (Auth)' do
+  it 'Delete an research (Auth)' do
     response = ApiRequest.create_delete_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       AuthService.auth_access_token
     )
 
     expect(response.code).to eq 204
   end
 
-  it 'Delete a deleted scholastic (Auth)' do
+  it 'Delete a deleted research (Auth)' do
     response = ApiRequest.create_delete_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       AuthService.auth_access_token
     )
 
@@ -303,10 +303,10 @@ describe('Scholastics Spec') do
     ).to eq true
   end
 
-  it 'Get a deleted scholastic (Auth)' do
+  it 'Get a deleted research (Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
-      path + '/' + scholastic_id,
+      path + '/' + research_id,
       AuthService.auth_access_token
     )
 
@@ -319,11 +319,11 @@ describe('Scholastics Spec') do
     ).to eq true
   end
 
-  it 'Edit an deleted scholastic (Auth)' do
+  it 'Edit an deleted research (Auth)' do
     response = ApiRequest.create_put_request(
       base_path,
-      path + '/' + scholastic_id,
-      data_req_edit_scholastic,
+      path + '/' + research_id,
+      data_req_edit_research,
       AuthService.auth_access_token
     )
 
