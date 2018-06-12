@@ -3,115 +3,66 @@ require 'uri'
 require 'json'
 require 'rest-client'
 
-@auth_access_token = ''
-@auth_refresh_token = ''
+module ApiRequest
 
-def base_path
-  ENV['BASE_PATH_AUTH']
-end
+  def self.create_get_request(base_path, path, auth_token)
+    header = {
+      content_type: :json,
+      accept: :json
+    }
 
-def right_credentials
-  {
-    username: ENV['RIGHT_USERNAME'],
-    password: ENV['RIGHT_PASSWORD']
-  }
-end
+    header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
 
-def wrong_credentials
-  {
-    username: ENV['WRONG_USERNAME'],
-    password: ENV['WRONG_PASSWORD']
-  }
-end
-
-def create_get_request(path, auth_token)
-  header = {
-    content_type: :json,
-    accept: :json
-  }
-
-  header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
-
-  begin
-    RestClient.get base_path + path, header
-  rescue RestClient::ExceptionWithResponse => e
-    e.response
-  end
-end
-
-def create_post_request(path, data, auth_token)
-  header = {
-    content_type: :json,
-    accept: :json
-  }
-
-  header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
-
-  begin
-    RestClient.post base_path + path, data.to_json, header
-  rescue RestClient::ExceptionWithResponse => e
-    e.response
-  end
-end
-
-def create_put_request(path, data, auth_token)
-  header = {
-    content_type: :json,
-    accept: :json
-  }
-
-  header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
-
-  begin
-    RestClient.put base_path + path, data.to_json, header
-  rescue RestClient::ExceptionWithResponse => e
-    e.response
-  end
-end
-
-def create_delete_request(path, auth_token)
-  header = {
-    content_type: :json,
-    accept: :json
-  }
-
-  header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
-
-  begin
-    RestClient.delete base_path + path, header
-  rescue RestClient::ExceptionWithResponse => e
-    e.response
-  end
-end
-
-def login(username, password)
-  credentials = {
-    username: username,
-    password: password
-  }
-
-  response = create_post_request('/v1/session', credentials, nil)
-
-  res = JSON.parse(response.body)
-
-  if response.code == 201
-    @auth_access_token = res['access_token'].to_s
-    @auth_refresh_token = res['refresh_token'].to_s
+    begin
+      RestClient.get base_path + path, header
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    end
   end
 
-  response
-end
+  def self.create_post_request(base_path, path, data, auth_token)
+    header = {
+      content_type: :json,
+      accept: :json
+    }
 
-def refresh_token
+    header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
 
-  response = create_put_request('/v1/session', {}, @auth_refresh_token)
+    begin
+      RestClient.post base_path + path, data.to_json, header
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    end
+  end
 
-  res = JSON.parse(response.body)
+  def self.create_put_request(base_path, path, data, auth_token)
+    header = {
+      content_type: :json,
+      accept: :json
+    }
 
-  @auth_access_token = res['access_token'].to_s
+    header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
 
-end
+    begin
+      RestClient.put base_path + path, data.to_json, header
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    end
+  end
 
-def login_with_default_user
-  login(right_credentials[:username], right_credentials[:password])
+  def self.create_delete_request(base_path, path, auth_token)
+    header = {
+      content_type: :json,
+      accept: :json
+    }
+
+    header['Authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
+
+    begin
+      RestClient.delete base_path + path, header
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    end
+  end
+
 end

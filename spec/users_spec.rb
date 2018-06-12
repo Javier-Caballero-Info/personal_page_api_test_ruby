@@ -2,6 +2,7 @@ require 'rspec'
 require 'json'
 require_relative '../utils/rest_client_library.rb'
 require_relative '../utils/json_utilities.rb'
+require_relative '../services/auth_service.rb'
 
 describe('Users Spec') do
 
@@ -23,9 +24,9 @@ describe('Users Spec') do
   }
 
   not_found_resp = {
-      code: 404,
-      message: 'User not found',
-      type: 'NOT_FOUND'
+    code: 404,
+    message: 'User not found',
+    type: 'NOT_FOUND'
   }
 
   my_user_info = {
@@ -38,14 +39,16 @@ describe('Users Spec') do
   user_id = ''
 
   before(:all) do
-    login_with_default_user
+    AuthService.login_with_default_user
   end
 
   it 'Get all users (Auth)' do
 
-    login_with_default_user
-
-    response = create_get_request('/v1/users', @auth_access_token)
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users',
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 200
 
@@ -62,7 +65,11 @@ describe('Users Spec') do
   end
 
   it 'Get all users (No Auth)' do
-    response = create_get_request('/v1/users', nil)
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users',
+      nil
+    )
 
     expect(response.code).to eq 401
 
@@ -72,7 +79,12 @@ describe('Users Spec') do
   end
 
   it 'Create an user (Auth)' do
-    response = create_post_request('/v1/users', data_req_new_user, @auth_access_token)
+    response = ApiRequest.create_post_request(
+      AuthService.base_path,
+      '/v1/users',
+      data_req_new_user,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 201
 
@@ -86,13 +98,18 @@ describe('Users Spec') do
 
     data_res_new_user['id'] = user_id
 
-    expect(JsonUtilities.compare_json(
-             res.to_json, data_res_new_user.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, data_res_new_user.to_json)
+    ).to eq true
   end
 
   it 'Create an user (No Auth)' do
-    response = create_post_request('/v1/users', data_req_new_user, nil)
+    response = ApiRequest.create_post_request(
+      AuthService.base_path,
+      '/v1/users',
+      data_req_new_user,
+      nil
+    )
 
     expect(response.code).to eq 401
 
@@ -103,7 +120,11 @@ describe('Users Spec') do
   end
 
   it 'Get an user (Auth)' do
-    response = create_get_request('/v1/users/' + user_id, @auth_access_token)
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 200
 
@@ -117,13 +138,17 @@ describe('Users Spec') do
 
     data_res_new_user['id'] = user_id
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, data_res_new_user.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, data_res_new_user.to_json)
+    ).to eq true
   end
 
   it 'Get an user (No Auth)' do
-    response = create_get_request('/v1/users/' + user_id, nil)
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      nil
+    )
 
     expect(response.code).to eq 401
 
@@ -133,7 +158,12 @@ describe('Users Spec') do
   end
 
   it 'Edit an user (Auth)' do
-    response = create_put_request('/v1/users/' + user_id, data_req_edit_user, @auth_access_token)
+    response = ApiRequest.create_put_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      data_req_edit_user,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 200
 
@@ -143,13 +173,18 @@ describe('Users Spec') do
 
     data_res_edit_user_res['id'] = user_id
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, data_res_edit_user_res.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, data_res_edit_user_res.to_json)
+    ).to eq true
   end
 
   it 'Edit an user (No Auth)' do
-    response = create_put_request('/v1/users/' + user_id, data_req_edit_user, nil)
+    response = ApiRequest.create_put_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      data_req_edit_user,
+      nil
+    )
 
     expect(response.code).to eq 401
 
@@ -160,7 +195,11 @@ describe('Users Spec') do
   end
 
   it 'Delete an user (No Auth)' do
-    response = create_delete_request('/v1/users/' + user_id, nil)
+    response = ApiRequest.create_delete_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      nil
+    )
 
     expect(response.code).to eq 401
 
@@ -170,49 +209,70 @@ describe('Users Spec') do
   end
 
   it 'Delete an user (Auth)' do
-    response = create_delete_request('/v1/users/' + user_id, @auth_access_token)
+    response = ApiRequest.create_delete_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 204
   end
 
   it 'Delete a deleted user (Auth)' do
-    response = create_delete_request('/v1/users/' + user_id, @auth_access_token)
+    response = ApiRequest.create_delete_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 404
 
     res = JSON.parse(response.body)
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, not_found_resp.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+    ).to eq true
   end
 
   it 'Get a deleted user (Auth)' do
-    response = create_get_request('/v1/users/' + user_id, @auth_access_token)
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 404
 
     res = JSON.parse(response.body)
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, not_found_resp.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+    ).to eq true
   end
 
   it 'Edit an deleted user (Auth)' do
-    response = create_put_request('/v1/users/' + user_id, data_req_edit_user, @auth_access_token)
+    response = ApiRequest.create_put_request(
+      AuthService.base_path,
+      '/v1/users/' + user_id,
+      data_req_edit_user,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 404
 
     res = JSON.parse(response.body)
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, not_found_resp.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+    ).to eq true
   end
 
   it 'Get my user (Auth)' do
-    response = create_get_request('/v1/me', @auth_access_token)
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/me',
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 200
 
@@ -222,13 +282,17 @@ describe('Users Spec') do
 
     my_user_info['id'] = res['id']
 
-    expect(JsonUtilities.compare_json(
-             res.to_json, my_user_info.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, my_user_info.to_json)
+    ).to eq true
   end
 
   it 'Get my user (No Auth)' do
-    response = create_get_request('/v1/me', nil)
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/me',
+      nil
+    )
 
     expect(response.code).to eq 401
 

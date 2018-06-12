@@ -1,6 +1,7 @@
 require 'rspec'
 require_relative '../utils/rest_client_library.rb'
 require_relative '../utils/awt_library.rb'
+require_relative '../services/auth_service.rb'
 
 describe('Auth Spec') do
 
@@ -15,7 +16,12 @@ describe('Auth Spec') do
   }
 
   it 'Correct login' do
-    response = create_post_request('/v1/session', right_credentials, nil)
+    response = ApiRequest.create_post_request(
+      AuthService.base_path,
+      '/v1/session',
+      AuthService.right_credentials,
+      nil
+    )
 
     expect(response.code).to eq 201
 
@@ -29,7 +35,12 @@ describe('Auth Spec') do
   end
 
   it 'Invalid credentials' do
-    response = create_post_request('/v1/session', wrong_credentials, nil)
+    response = ApiRequest.create_post_request(
+      AuthService.base_path,
+      '/v1/session',
+      AuthService.wrong_credentials,
+      nil
+    )
 
     expect(response.code).to eq 400
 
@@ -41,7 +52,12 @@ describe('Auth Spec') do
   end
 
   it 'Invalid request' do
-    response = create_post_request('/v1/session', {}, nil)
+    response = ApiRequest.create_post_request(
+      AuthService.base_path,
+      '/v1/session',
+      {},
+      nil
+    )
 
     expect(response.code).to eq 400
 
@@ -53,9 +69,14 @@ describe('Auth Spec') do
   end
 
   it 'Refresh token' do
-    login_with_default_user
+    AuthService.login_with_default_user
 
-    response = create_put_request('/v1/session', {}, @auth_refresh_token)
+    response = ApiRequest.create_put_request(
+      AuthService.base_path,
+      '/v1/session',
+      {},
+      AuthService.auth_refresh_token
+    )
 
     res = JSON.parse(response.body)
 
@@ -67,23 +88,36 @@ describe('Auth Spec') do
   end
 
   it 'Change password' do
-    login_with_default_user
 
-    response = login_with_default_user
+    response = AuthService.login_with_default_user
 
     expect(response.code).to eq 201
 
-    response = create_put_request('/v1/password', new_credentials, @auth_access_token)
+    response = ApiRequest.create_put_request(
+      AuthService.base_path,
+      '/v1/password',
+      new_credentials,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 204
 
-    response = login_with_default_user
+    response = AuthService.login_with_default_user
 
     expect(response.code).to eq 400
 
-    response = create_put_request('/v1/password', old_credentials, @auth_access_token)
+    response = ApiRequest.create_put_request(
+      AuthService.base_path,
+      '/v1/password',
+      old_credentials,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 204
+
+    response = AuthService.login_with_default_user
+
+    expect(response.code).to eq 201
   end
 
 end
