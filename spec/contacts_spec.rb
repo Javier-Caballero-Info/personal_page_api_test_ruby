@@ -2,58 +2,58 @@ require 'rspec'
 require 'json'
 require_relative '../utils/rest_client_library.rb'
 require_relative '../utils/json_utilities.rb'
+require_relative '../services/auth_service.rb'
+require_relative '../services/admin_service.rb'
 
 describe('Contacts Spec') do
 
   user_keys = %w[icon img info lang name, order, id]
 
-  data_req_new_user = {
-    email: 'new_user@gmail.com',
-    first_name: 'New',
-    last_name: 'User',
-    password: 'new_user',
-    username: 'new_user'
+  data_req_new_contact = {
+    icon: 'icon-whatsapp',
+    img: 'https://s3.amazonaws.com/caballerojavier13-pages-files/personal_page/Mensajeria/whatsapp.png',
+    info: '+54-263-4200-463',
+    name: 'Whatsapp',
+    order: 1
   }
 
-  data_req_edit_user = {
-    email: 'edited_user@gmail.com',
-    first_name: 'Edited',
-    last_name: 'User',
-    username: 'edited_user'
+  data_req_edit_contact = {
+    icon: 'icon-telegram',
+    img: 'https://s3.amazonaws.com/caballerojavier13-pages-files/personal_page/Mensajeria/telegram.png',
+    info: 'caballerojavier13',
+    name: 'Telegram',
+    order: 2
   }
 
   not_found_resp = {
-    code: 404,
-    message: 'User not found',
-    type: 'NOT_FOUND'
-  }
-
-  my_user_info = {
-    email: 'caballerojavier13@gmail.com',
-    first_name: 'Javier',
-    last_name: 'Caballero',
-    username: 'caballerojavier13'
+    error: 'Contact not found.'
   }
 
   contact_id = ''
 
-  lang = 'es'
+  lang = AdminService.random_lang
+  path = ''
+  base_path = ''
 
   before(:all) do
-    login_with_default_user
+    AuthService.login_with_default_user
+    path = AdminService.contact_path lang
+    base_path = AdminService.base_path
   end
 
   it 'Get all contacts (Auth)' do
 
-    login_with_default_user
-
-    response = create_get_request('/' + lang + '/contacts', @auth_access_token)
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 200
 
     res = JSON.parse(response.body)
 
-    expect(res['data'].size).to >= 0
+    expect(res['data'].size).to eq 0
 
     res['data'].each do |u|
       user_keys.each do |k|
@@ -64,7 +64,11 @@ describe('Contacts Spec') do
   end
 
   it 'Get all contacts (No Auth)' do
-    response = create_get_request('/' + lang + '/contacts', nil)
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      nil
+    )
 
     expect(response.code).to eq 403
 
@@ -73,174 +77,263 @@ describe('Contacts Spec') do
     expect(res['message']).to eq 'No token provided.'
   end
 
-=begin
-
-  it 'Create an user (Auth)' do
-    response = create_post_request('/v1/users', data_req_new_user, @auth_access_token)
+  it 'Create a contact (Auth)' do
+    response = ApiRequest.create_post_request(
+      base_path,
+      path,
+      data_req_new_contact,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 201
 
     res = JSON.parse(response.body)
 
-    expect(res.has_key?('id')).to eq true
+    expect(res.has_key?('data')).to eq true
 
-    data_res_new_user = data_req_new_user
+    data = res['data']
 
-    user_id = res['id']
+    expect(data.has_key?('id')).to eq true
 
-    data_res_new_user['id'] = user_id
+    data_res_new_contact = data_req_new_contact.clone
+
+    contact_id = data['id']
+
+    data_res_new_contact['id'] = contact_id
+
+    data_res_new_contact['lang'] = lang.to_s.upcase
 
     expect(JsonUtilities.compare_json(
-             res.to_json, data_res_new_user.to_json
-    )).to eq true
+      data.to_json, data_res_new_contact.to_json)
+    ).to eq true
   end
 
-  it 'Create an user (No Auth)' do
-    response = create_post_request('/v1/users', data_req_new_user, nil)
+  it 'Create a contact (No Auth)' do
+    response = ApiRequest.create_post_request(
+      base_path,
+      path,
+      data_req_new_contact,
+      nil
+    )
 
-    expect(response.code).to eq 401
+    expect(response.code).to eq 403
 
     res = JSON.parse(response.body)
 
-    expect(res['msg']).to eq 'Missing Authorization Header'
+    expect(res['message']).to eq 'No token provided.'
 
   end
 
-  it 'Get an user (Auth)' do
-    response = create_get_request('/v1/users/' + user_id, @auth_access_token)
+  it 'Get a contact (Auth)' do
+    response = ApiRequest.create_get_request(
+      base_path,
+      path + '/' + contact_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 200
 
     res = JSON.parse(response.body)
 
-    expect(res.has_key?('id')).to eq true
+    expect(res.has_key?('data')).to eq true
 
-    data_res_new_user = data_req_new_user.clone
+    data = res['data']
 
-    user_id = res['id']
+    expect(data.has_key?('id')).to eq true
 
-    data_res_new_user['id'] = user_id
+    data_res_new_contact = data_req_new_contact.clone
+
+    data_res_new_contact['id'] = contact_id
+
+    data_res_new_contact['lang'] = lang.to_s.upcase
 
     expect(JsonUtilities.compare_json(
-        res.to_json, data_res_new_user.to_json
-    )).to eq true
+      data.to_json, data_res_new_contact.to_json)
+    ).to eq true
   end
 
-  it 'Get an user (No Auth)' do
-    response = create_get_request('/v1/users/' + user_id, nil)
+  it 'Get a contact (No Auth)' do
+    response = ApiRequest.create_get_request(
+      base_path,
+      path + '/' + contact_id,
+      nil
+    )
 
-    expect(response.code).to eq 401
+    expect(response.code).to eq 403
 
     res = JSON.parse(response.body)
 
-    expect(res['msg']).to eq 'Missing Authorization Header'
+    expect(res['message']).to eq 'No token provided.'
   end
 
   it 'Edit an user (Auth)' do
-    response = create_put_request('/v1/users/' + user_id, data_req_edit_user, @auth_access_token)
+    response = ApiRequest.create_put_request(
+      base_path,
+      path + '/' + contact_id,
+      data_req_edit_contact,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 200
 
     res = JSON.parse(response.body)
 
-    data_res_edit_user_res = data_req_edit_user.clone
+    expect(res.has_key?('data')).to eq true
 
-    data_res_edit_user_res['id'] = user_id
+    data = res['data']
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, data_res_edit_user_res.to_json
-    )).to eq true
+    data_res_edit_user_res = data_req_edit_contact.clone
+
+    data_res_edit_user_res['id'] = contact_id
+
+    data_res_edit_user_res['lang'] = lang.to_s.upcase
+
+    expect(
+      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
+    ).to eq true
+  end
+
+  it 'Get an edited contact (Auth)' do
+    response = ApiRequest.create_get_request(
+      base_path,
+      path + '/' + contact_id,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res.has_key?('data')).to eq true
+
+    data = res['data']
+
+    data_res_edit_user_res = data_req_edit_contact.clone
+
+    data_res_edit_user_res['id'] = contact_id
+
+    data_res_edit_user_res['lang'] = lang.to_s.upcase
+
+    expect(
+      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
+    ).to eq true
   end
 
   it 'Edit an user (No Auth)' do
-    response = create_put_request('/v1/users/' + user_id, data_req_edit_user, nil)
+    response = ApiRequest.create_put_request(
+      base_path,
+      path + '/' + contact_id,
+      data_req_edit_contact,
+      nil
+    )
 
-    expect(response.code).to eq 401
-
-    res = JSON.parse(response.body)
-
-    expect(res['msg']).to eq 'Missing Authorization Header'
-
-  end
-
-  it 'Delete an user (No Auth)' do
-    response = create_delete_request('/v1/users/' + user_id, nil)
-
-    expect(response.code).to eq 401
+    expect(response.code).to eq 403
 
     res = JSON.parse(response.body)
 
-    expect(res['msg']).to eq 'Missing Authorization Header'
+    expect(res['message']).to eq 'No token provided.'
+
   end
 
-  it 'Delete an user (Auth)' do
-    response = create_delete_request('/v1/users/' + user_id, @auth_access_token)
+  it 'Get a contact (Auth)' do
+    response = ApiRequest.create_get_request(
+      base_path,
+      path + '/' + contact_id,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res.has_key?('data')).to eq true
+
+    data = res['data']
+
+    expect(data.has_key?('id')).to eq true
+
+    data_res_edit_contact = data_req_edit_contact.clone
+
+    data_res_edit_contact['id'] = contact_id
+
+    data_res_edit_contact['lang'] = lang.to_s.upcase
+
+    expect(JsonUtilities.compare_json(
+      data.to_json, data.to_json)
+    ).to eq true
+  end
+
+  it 'Delete an contact (No Auth)' do
+    response = ApiRequest.create_delete_request(
+      base_path,
+      path + '/' + contact_id,
+      nil
+    )
+
+    expect(response.code).to eq 403
+
+    res = JSON.parse(response.body)
+
+    expect(res['message']).to eq 'No token provided.'
+  end
+
+  it 'Delete an contact (Auth)' do
+    response = ApiRequest.create_delete_request(
+      base_path,
+      path + '/' + contact_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 204
   end
 
-  it 'Delete a deleted user (Auth)' do
-    response = create_delete_request('/v1/users/' + user_id, @auth_access_token)
+  it 'Delete a deleted contact (Auth)' do
+    response = ApiRequest.create_delete_request(
+      base_path,
+      path + '/' + contact_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 404
 
     res = JSON.parse(response.body)
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, not_found_resp.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+    ).to eq true
   end
 
-  it 'Get a deleted user (Auth)' do
-    response = create_get_request('/v1/users/' + user_id, @auth_access_token)
+  it 'Get a deleted contact (Auth)' do
+    response = ApiRequest.create_get_request(
+      base_path,
+      path + '/' + contact_id,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 404
 
     res = JSON.parse(response.body)
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, not_found_resp.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+    ).to eq true
   end
 
-  it 'Edit an deleted user (Auth)' do
-    response = create_put_request('/v1/users/' + user_id, data_req_edit_user, @auth_access_token)
+  it 'Edit an deleted contact (Auth)' do
+    response = ApiRequest.create_put_request(
+      base_path,
+      path + '/' + contact_id,
+      data_req_edit_contact,
+      AuthService.auth_access_token
+    )
 
     expect(response.code).to eq 404
 
     res = JSON.parse(response.body)
 
-    expect(JsonUtilities.compare_json(
-        res.to_json, not_found_resp.to_json
-    )).to eq true
+    expect(
+      JsonUtilities.compare_json(res.to_json, not_found_resp.to_json)
+    ).to eq true
   end
-
-  it 'Get my user (Auth)' do
-    response = create_get_request('/v1/me', @auth_access_token)
-
-    expect(response.code).to eq 200
-
-    res = JSON.parse(response.body)
-
-    expect(res.has_key?('id')).to eq true
-
-    my_user_info['id'] = res['id']
-
-    expect(JsonUtilities.compare_json(
-             res.to_json, my_user_info.to_json
-    )).to eq true
-  end
-
-  it 'Get my user (No Auth)' do
-    response = create_get_request('/v1/me', nil)
-
-    expect(response.code).to eq 401
-
-    res = JSON.parse(response.body)
-
-    expect(res['msg']).to eq 'Missing Authorization Header'
-  end
-
-=end
 
 end
