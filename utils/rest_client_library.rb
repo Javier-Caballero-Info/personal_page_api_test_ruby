@@ -43,8 +43,6 @@ module ApiRequest
 
     header['authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
 
-    puts header
-
     begin
       RestClient.post base_path + path, {:upload => File.new(file_path, 'rb')}, header
     rescue RestClient::ExceptionWithResponse => e
