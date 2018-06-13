@@ -6,6 +6,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    json-compare (0.1.8)
     jwt (2.1.0)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -31,14 +32,17 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
+    yajl (0.3.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  json-compare
   jwt
   rest-client
   rspec
+  yajl
 
 BUNDLED WITH
    1.16.2

@@ -22,6 +22,10 @@ module AdminService
     "/%s/educations" % lang
   end
 
+  def self.portfolio_path(lang)
+    "/%s/portfolios" % lang
+  end
+
   def self.research_path(lang)
     "/%s/researches" % lang
   end
