@@ -35,6 +35,23 @@ module ApiRequest
     end
   end
 
+  def self.create_post_request_multipart(base_path, path, file_path, auth_token)
+    header = {
+      content_type: 'multipart/form-data',
+      accept: :json,
+    }
+
+    header['authorization'] = 'Bearer ' + auth_token unless auth_token.nil?
+
+    puts header
+
+    begin
+      RestClient.post base_path + path, {:upload => File.new(file_path, 'rb')}, header
+    rescue RestClient::ExceptionWithResponse => e
+      e.response
+    end
+  end
+
   def self.create_put_request(base_path, path, data, auth_token)
     header = {
       content_type: :json,
