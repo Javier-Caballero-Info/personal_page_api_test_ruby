@@ -95,9 +95,7 @@ describe('Social_networks Spec') do
 
     data_res_new_social_network['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_social_network.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_social_network.to_json, data.to_json)
   end
 
   it 'Get all social_networks (size == 1) (Auth)' do
@@ -161,9 +159,7 @@ describe('Social_networks Spec') do
 
     data_res_new_social_network['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_social_network.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_social_network.to_json, data.to_json)
   end
 
   it 'Get a social_network (No Auth)' do
@@ -196,15 +192,13 @@ describe('Social_networks Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_social_network.clone
+    data_res_edit_social_network = data_req_edit_social_network.clone
 
-    data_res_edit_user_res['id'] = social_network_id
+    data_res_edit_social_network['id'] = social_network_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_social_network['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_social_network.to_json, data.to_json)
   end
 
   it 'Get an edited social_network (Auth)' do
@@ -222,15 +216,13 @@ describe('Social_networks Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_social_network.clone
+    data_res_edit_social_network = data_req_edit_social_network.clone
 
-    data_res_edit_user_res['id'] = social_network_id
+    data_res_edit_social_network['id'] = social_network_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_social_network['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_social_network.to_json, data.to_json)
   end
 
   it 'Get all social_networks (size == 1) (Auth)' do
@@ -294,9 +286,7 @@ describe('Social_networks Spec') do
 
     data_res_edit_social_network['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_social_network.to_json, data.to_json)
   end
 
   it 'Delete an social_network (No Auth)' do
@@ -334,9 +324,7 @@ describe('Social_networks Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get a deleted social_network (Auth)' do
@@ -350,9 +338,7 @@ describe('Social_networks Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Edit an deleted social_network (Auth)' do
@@ -367,9 +353,7 @@ describe('Social_networks Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get all social_networks (size == 0) (Auth)' do

@@ -97,9 +97,7 @@ describe('Researches Spec') do
 
     data_res_new_research['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_research.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_research.to_json, data.to_json)
   end
 
   it 'Get all researches (size == 1) (Auth)' do
@@ -163,9 +161,7 @@ describe('Researches Spec') do
 
     data_res_new_research['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_research.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_research.to_json, data.to_json)
   end
 
   it 'Get a research (No Auth)' do
@@ -198,15 +194,13 @@ describe('Researches Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_research.clone
+    data_res_edit_research = data_req_edit_research.clone
 
-    data_res_edit_user_res['id'] = research_id
+    data_res_edit_research['id'] = research_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_research['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_research.to_json, data.to_json)
   end
 
   it 'Get an edited research (Auth)' do
@@ -224,15 +218,13 @@ describe('Researches Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_research.clone
+    data_res_edit_research = data_req_edit_research.clone
 
-    data_res_edit_user_res['id'] = research_id
+    data_res_edit_research['id'] = research_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_research['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_research.to_json, data.to_json)
   end
 
   it 'Get all researches (size == 1) (Auth)' do
@@ -296,9 +288,7 @@ describe('Researches Spec') do
 
     data_res_edit_research['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_research.to_json, data.to_json)
   end
 
   it 'Delete an research (No Auth)' do
@@ -336,9 +326,7 @@ describe('Researches Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get a deleted research (Auth)' do
@@ -352,9 +340,7 @@ describe('Researches Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Edit an deleted research (Auth)' do
@@ -369,9 +355,7 @@ describe('Researches Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get all researches (size == 0) (Auth)' do

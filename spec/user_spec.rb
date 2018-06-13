@@ -98,9 +98,7 @@ describe('Users Spec') do
 
     data_res_new_user['id'] = user_id
 
-    expect(
-      JsonUtilities.compare_json(res.to_json, data_res_new_user.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_user.to_json, res.to_json)
   end
 
   it 'Get all users (size == 2) (Auth)' do
@@ -160,9 +158,7 @@ describe('Users Spec') do
 
     data_res_new_user['id'] = user_id
 
-    expect(
-      JsonUtilities.compare_json(res.to_json, data_res_new_user.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_user.to_json, res.to_json)
   end
 
   it 'Get an user (No Auth)' do
@@ -191,13 +187,11 @@ describe('Users Spec') do
 
     res = JSON.parse(response.body)
 
-    data_res_edit_user_res = data_req_edit_user.clone
+    data_res_edit_user = data_req_edit_user.clone
 
-    data_res_edit_user_res['id'] = user_id
+    data_res_edit_user['id'] = user_id
 
-    expect(
-      JsonUtilities.compare_json(res.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_user.to_json, res.to_json)
   end
 
   it 'Get all users (size == 2) (Auth)' do
@@ -273,9 +267,7 @@ describe('Users Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get a deleted user (Auth)' do
@@ -289,9 +281,7 @@ describe('Users Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Edit an deleted user (Auth)' do
@@ -306,9 +296,7 @@ describe('Users Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get all users (size == 1) (Auth)' do
@@ -348,9 +336,7 @@ describe('Users Spec') do
 
     my_user_info['id'] = res['id']
 
-    expect(
-      JsonUtilities.compare_json(res.to_json, my_user_info.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(my_user_info.to_json, res.to_json)
   end
 
   it 'Get my user (No Auth)' do

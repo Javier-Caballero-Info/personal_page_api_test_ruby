@@ -97,9 +97,7 @@ describe('Educations Spec') do
 
     data_res_new_education['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_education.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_education.to_json, data.to_json)
   end
 
   it 'Get all educations (size == 1) (Auth)' do
@@ -163,9 +161,7 @@ describe('Educations Spec') do
 
     data_res_new_education['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_education.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_education.to_json, data.to_json)
   end
 
   it 'Get a education (No Auth)' do
@@ -198,15 +194,13 @@ describe('Educations Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_education.clone
+    data_res_edit_education = data_req_edit_education.clone
 
-    data_res_edit_user_res['id'] = education_id
+    data_res_edit_education['id'] = education_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_education['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_education.to_json, data.to_json)
   end
 
   it 'Get an edited education (Auth)' do
@@ -224,15 +218,13 @@ describe('Educations Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_education.clone
+    data_res_edit_education = data_req_edit_education.clone
 
-    data_res_edit_user_res['id'] = education_id
+    data_res_edit_education['id'] = education_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_education['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_education.to_json, data.to_json)
   end
 
   it 'Edit an user (No Auth)' do
@@ -274,9 +266,7 @@ describe('Educations Spec') do
 
     data_res_edit_education['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_education.to_json, data.to_json)
   end
 
   it 'Get all educations (size == 1) (Auth)' do
@@ -335,9 +325,7 @@ describe('Educations Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get a deleted education (Auth)' do
@@ -351,9 +339,7 @@ describe('Educations Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Edit an deleted education (Auth)' do
@@ -368,9 +354,7 @@ describe('Educations Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get all educations (size == 1) (Auth)' do

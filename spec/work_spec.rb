@@ -96,9 +96,7 @@ describe('Works Spec') do
 
     data_res_new_work['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_work.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_work.to_json, data.to_json)
   end
 
   it 'Get all works (size == 1) (Auth)' do
@@ -162,9 +160,7 @@ describe('Works Spec') do
 
     data_res_new_work['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_work.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_work.to_json, data.to_json)
   end
 
   it 'Get a work (No Auth)' do
@@ -197,15 +193,13 @@ describe('Works Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_work.clone
+    data_res_edit_work = data_req_edit_work.clone
 
-    data_res_edit_user_res['id'] = work_id
+    data_res_edit_work['id'] = work_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_work['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_work.to_json, data.to_json)
   end
 
   it 'Get an edited work (Auth)' do
@@ -223,15 +217,13 @@ describe('Works Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_work.clone
+    data_res_edit_work = data_req_edit_work.clone
 
-    data_res_edit_user_res['id'] = work_id
+    data_res_edit_work['id'] = work_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_work['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_work.to_json, data.to_json)
   end
 
   it 'Get all works (size == 1) (Auth)' do
@@ -295,9 +287,7 @@ describe('Works Spec') do
 
     data_res_edit_work['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_work.to_json, data.to_json)
   end
 
   it 'Delete an work (No Auth)' do
@@ -335,9 +325,7 @@ describe('Works Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get a deleted work (Auth)' do
@@ -351,9 +339,7 @@ describe('Works Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Edit an deleted work (Auth)' do
@@ -368,9 +354,7 @@ describe('Works Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get all works (size == 0) (Auth)' do

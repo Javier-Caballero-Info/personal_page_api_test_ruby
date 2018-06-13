@@ -97,9 +97,7 @@ describe('Contacts Spec') do
 
     data_res_new_contact['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_contact.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_contact.to_json, data.to_json)
   end
 
   it 'Get all contacts (size == 1) (Auth)' do
@@ -163,9 +161,7 @@ describe('Contacts Spec') do
 
     data_res_new_contact['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_contact.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_contact.to_json, data.to_json)
   end
 
   it 'Get a contact (No Auth)' do
@@ -198,15 +194,13 @@ describe('Contacts Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_contact.clone
+    data_res_edit_contact = data_req_edit_contact.clone
 
-    data_res_edit_user_res['id'] = contact_id
+    data_res_edit_contact['id'] = contact_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_contact['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_contact.to_json, data.to_json)
   end
 
   it 'Get an edited contact (Auth)' do
@@ -224,15 +218,13 @@ describe('Contacts Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_contact.clone
+    data_res_edit_contact = data_req_edit_contact.clone
 
-    data_res_edit_user_res['id'] = contact_id
+    data_res_edit_contact['id'] = contact_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
-
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    data_res_edit_contact['lang'] = lang.to_s.upcase
+    
+    JsonUtilities.compare_json(data_res_edit_contact.to_json, data.to_json)
   end
 
   it 'Edit an user (No Auth)' do
@@ -274,9 +266,7 @@ describe('Contacts Spec') do
 
     data_res_edit_contact['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_contact.to_json, data.to_json)
   end
 
   it 'Get all contacts (size == 1) (Auth)' do
@@ -336,9 +326,7 @@ describe('Contacts Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get a deleted contact (Auth)' do
@@ -352,9 +340,7 @@ describe('Contacts Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Edit an deleted contact (Auth)' do
@@ -369,9 +355,7 @@ describe('Contacts Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get all contacts (size == 0) (Auth)' do

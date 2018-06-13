@@ -97,9 +97,7 @@ describe('Scholastic Spec') do
 
     data_res_new_scholastic['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_scholastic.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_scholastic.to_json, data.to_json)
   end
 
   it 'Get all scholastic (size == 1) (Auth)' do
@@ -163,9 +161,7 @@ describe('Scholastic Spec') do
 
     data_res_new_scholastic['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data_res_new_scholastic.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_new_scholastic.to_json, data.to_json)
   end
 
   it 'Get a scholastic (No Auth)' do
@@ -198,15 +194,13 @@ describe('Scholastic Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_scholastic.clone
+    data_res_edit_scholastic = data_req_edit_scholastic.clone
 
-    data_res_edit_user_res['id'] = scholastic_id
+    data_res_edit_scholastic['id'] = scholastic_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_scholastic['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_scholastic.to_json, data.to_json)
   end
 
   it 'Get an edited scholastic (Auth)' do
@@ -224,15 +218,13 @@ describe('Scholastic Spec') do
 
     data = res['data']
 
-    data_res_edit_user_res = data_req_edit_scholastic.clone
+    data_res_edit_scholastic = data_req_edit_scholastic.clone
 
-    data_res_edit_user_res['id'] = scholastic_id
+    data_res_edit_scholastic['id'] = scholastic_id
 
-    data_res_edit_user_res['lang'] = lang.to_s.upcase
+    data_res_edit_scholastic['lang'] = lang.to_s.upcase
 
-    expect(
-      JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_scholastic.to_json, data.to_json)
   end
 
   it 'Edit an user (No Auth)' do
@@ -274,9 +266,7 @@ describe('Scholastic Spec') do
 
     data_res_edit_scholastic['lang'] = lang.to_s.upcase
 
-    expect(JsonUtilities.compare_json(
-      data.to_json, data.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(data_res_edit_scholastic.to_json, data.to_json)
   end
 
   it 'Get all scholastic (size == 1) (Auth)' do
@@ -336,9 +326,7 @@ describe('Scholastic Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get a deleted scholastic (Auth)' do
@@ -352,9 +340,7 @@ describe('Scholastic Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Edit an deleted scholastic (Auth)' do
@@ -369,9 +355,7 @@ describe('Scholastic Spec') do
 
     res = JSON.parse(response.body)
 
-    expect(
-      JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
-    ).to eq true
+    JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
   end
 
   it 'Get all scholastic (size == 0) (Auth)' do
