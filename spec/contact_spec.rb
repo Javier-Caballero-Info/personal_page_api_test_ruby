@@ -7,7 +7,7 @@ require_relative '../services/admin_service.rb'
 
 describe('Contacts Spec') do
 
-  user_keys = %w[icon img info lang name, order, id]
+  user_keys = %w[icon img info lang name order id]
 
   data_req_new_contact = {
     icon: 'icon-whatsapp',
@@ -41,7 +41,7 @@ describe('Contacts Spec') do
     base_path = AdminService.base_path
   end
 
-  it 'Get all contacts (Auth)' do
+  it 'Get all contacts (size == 0) (Auth)' do
 
     response = ApiRequest.create_get_request(
       base_path,
@@ -54,12 +54,6 @@ describe('Contacts Spec') do
     res = JSON.parse(response.body)
 
     expect(res['data'].size).to eq 0
-
-    res['data'].each do |u|
-      user_keys.each do |k|
-        expect(u.has_key? k).to eq true
-      end
-    end
 
   end
 
@@ -106,6 +100,28 @@ describe('Contacts Spec') do
     expect(JsonUtilities.compare_json(
       data.to_json, data_res_new_contact.to_json)
     ).to eq true
+  end
+
+  it 'Get all contacts (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Create a contact (No Auth)' do
@@ -263,6 +279,28 @@ describe('Contacts Spec') do
     ).to eq true
   end
 
+  it 'Get all contacts (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
+  end
+
   it 'Delete an contact (No Auth)' do
     response = ApiRequest.create_delete_request(
       base_path,
@@ -334,6 +372,21 @@ describe('Contacts Spec') do
     expect(
       JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
+  end
+
+  it 'Get all contacts (size == 0) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 0
   end
 
 end

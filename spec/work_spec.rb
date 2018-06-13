@@ -7,7 +7,7 @@ require_relative '../services/admin_service.rb'
 
 describe('Works Spec') do
 
-  user_keys = %w[icon img info lang name, order, id]
+  user_keys = %w[company description position order time id]
 
   data_req_new_work = {
     company: 'Globant',
@@ -41,7 +41,7 @@ describe('Works Spec') do
     base_path = AdminService.base_path
   end
 
-  it 'Get all works (Auth)' do
+  it 'Get all works (size == 0) (Auth)' do
 
     response = ApiRequest.create_get_request(
       base_path,
@@ -54,13 +54,6 @@ describe('Works Spec') do
     res = JSON.parse(response.body)
 
     expect(res['data'].size).to eq 0
-
-    res['data'].each do |u|
-      user_keys.each do |k|
-        expect(u.has_key? k).to eq true
-      end
-    end
-
   end
 
   it 'Get all works (No Auth)' do
@@ -106,6 +99,28 @@ describe('Works Spec') do
     expect(JsonUtilities.compare_json(
       data.to_json, data_res_new_work.to_json)
     ).to eq true
+  end
+
+  it 'Get all works (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Create a work (No Auth)' do
@@ -217,6 +232,28 @@ describe('Works Spec') do
     expect(
       JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
     ).to eq true
+  end
+
+  it 'Get all works (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Edit an user (No Auth)' do
@@ -334,6 +371,21 @@ describe('Works Spec') do
     expect(
       JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
+  end
+
+  it 'Get all works (size == 0) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 0
   end
 
 end

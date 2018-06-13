@@ -5,9 +5,9 @@ require_relative '../utils/json_utilities.rb'
 require_relative '../services/auth_service.rb'
 require_relative '../services/admin_service.rb'
 
-describe('Researchs Spec') do
+describe('Researches Spec') do
 
-  user_keys = %w[icon img info lang name, order, id]
+  user_keys = %w[description group project time order lang id]
 
   data_req_new_research = {
     description: 'Desarrollo del marco teórico, representación en congresos, e implementación del sistema.',
@@ -41,7 +41,7 @@ describe('Researchs Spec') do
     base_path = AdminService.base_path
   end
 
-  it 'Get all researchs (Auth)' do
+  it 'Get all researches (size == 0) (Auth)' do
 
     response = ApiRequest.create_get_request(
       base_path,
@@ -55,15 +55,9 @@ describe('Researchs Spec') do
 
     expect(res['data'].size).to eq 0
 
-    res['data'].each do |u|
-      user_keys.each do |k|
-        expect(u.has_key? k).to eq true
-      end
-    end
-
   end
 
-  it 'Get all researchs (No Auth)' do
+  it 'Get all researches (No Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
       path,
@@ -106,6 +100,28 @@ describe('Researchs Spec') do
     expect(JsonUtilities.compare_json(
       data.to_json, data_res_new_research.to_json)
     ).to eq true
+  end
+
+  it 'Get all researches (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Create a research (No Auth)' do
@@ -217,6 +233,28 @@ describe('Researchs Spec') do
     expect(
       JsonUtilities.compare_json(data.to_json, data_res_edit_user_res.to_json)
     ).to eq true
+  end
+
+  it 'Get all researches (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Edit an user (No Auth)' do
@@ -334,6 +372,22 @@ describe('Researchs Spec') do
     expect(
       JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
+  end
+
+  it 'Get all researches (size == 0) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 0
+
   end
 
 end

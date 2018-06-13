@@ -42,7 +42,7 @@ describe('Users Spec') do
     AuthService.login_with_default_user
   end
 
-  it 'Get all users (Auth)' do
+  it 'Get all users (size == 1) (Auth)' do
 
     response = ApiRequest.create_get_request(
       AuthService.base_path,
@@ -101,6 +101,28 @@ describe('Users Spec') do
     expect(
       JsonUtilities.compare_json(res.to_json, data_res_new_user.to_json)
     ).to eq true
+  end
+
+  it 'Get all users (size == 2) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users',
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res.size).to be 2
+
+    res.each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Create an user (No Auth)' do
@@ -176,6 +198,28 @@ describe('Users Spec') do
     expect(
       JsonUtilities.compare_json(res.to_json, data_res_edit_user_res.to_json)
     ).to eq true
+  end
+
+  it 'Get all users (size == 2) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users',
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res.size).to be 2
+
+    res.each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Edit an user (No Auth)' do
@@ -265,6 +309,28 @@ describe('Users Spec') do
     expect(
       JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
+  end
+
+  it 'Get all users (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      AuthService.base_path,
+      '/v1/users',
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res.size).to be 1
+
+    res.each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Get my user (Auth)' do

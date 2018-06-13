@@ -7,7 +7,7 @@ require_relative '../services/admin_service.rb'
 
 describe('Scholastic Spec') do
 
-  user_keys = %w[icon img info lang name, order, id]
+  user_keys = %w[description institute subject time lang order id]
 
   data_req_new_scholastic = {
     description: 'Ayudante de Cátedra de 2da Ad-Honorem',
@@ -41,7 +41,7 @@ describe('Scholastic Spec') do
     base_path = AdminService.base_path
   end
 
-  it 'Get all scholastics (Auth)' do
+  it 'Get all scholastic (size == 0) (Auth)' do
 
     response = ApiRequest.create_get_request(
       base_path,
@@ -55,15 +55,9 @@ describe('Scholastic Spec') do
 
     expect(res['data'].size).to eq 0
 
-    res['data'].each do |u|
-      user_keys.each do |k|
-        expect(u.has_key? k).to eq true
-      end
-    end
-
   end
 
-  it 'Get all scholastics (No Auth)' do
+  it 'Get all scholastic (No Auth)' do
     response = ApiRequest.create_get_request(
       base_path,
       path,
@@ -106,6 +100,28 @@ describe('Scholastic Spec') do
     expect(JsonUtilities.compare_json(
       data.to_json, data_res_new_scholastic.to_json)
     ).to eq true
+  end
+
+  it 'Get all scholastic (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
   end
 
   it 'Create a scholastic (No Auth)' do
@@ -263,6 +279,28 @@ describe('Scholastic Spec') do
     ).to eq true
   end
 
+  it 'Get all scholastic (size == 1) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 1
+
+    res['data'].each do |u|
+      user_keys.each do |k|
+        expect(u.has_key? k).to eq true
+      end
+    end
+
+  end
+
   it 'Delete an scholastic (No Auth)' do
     response = ApiRequest.create_delete_request(
       base_path,
@@ -334,6 +372,22 @@ describe('Scholastic Spec') do
     expect(
       JsonUtilities.compare_json(not_found_resp.to_json, res.to_json)
     ).to eq true
+  end
+
+  it 'Get all scholastic (size == 0) (Auth)' do
+
+    response = ApiRequest.create_get_request(
+      base_path,
+      path,
+      AuthService.auth_access_token
+    )
+
+    expect(response.code).to eq 200
+
+    res = JSON.parse(response.body)
+
+    expect(res['data'].size).to eq 0
+
   end
 
 end
