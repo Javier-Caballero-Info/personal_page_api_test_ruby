@@ -127,11 +127,6 @@ personal_page_api_test_ruby
 
 ```bash
 # Run the tests
-docker exec -t api_test_ruby sh -c "rspec spec/*_spec.rb --format documentation --format RspecJunitFormatter --out report.xml"
-```
-
-```bash
-# Run the tests
 docker exec -t api_test_ruby sh -c "parallel_test  -t rspec -n 10 --first-is-1  spec/*_spec.rb"
 ```
 
@@ -143,11 +138,6 @@ docker exec -t api_test_ruby sh -c "xunit-viewer --results=./tmp  --output=repor
 ```bash
 # Export Tests Results: 
 docker cp api_test_ruby:/usr/src/app/report.html "$WORKSPACE"/report.html
-```
-
-```bash
-# Export Tests Results: 
-docker cp api_test_ruby:/usr/src/app/report.xml "$WORKSPACE"/report.xml
 ```
 
 ## Contributing
