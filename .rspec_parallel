@@ -1,0 +1,2 @@
+--format RspecJunitFormatter
+--out tmp/rspec<%= ENV['TEST_ENV_NUMBER'].to_i < 10 ? '0' + ENV['TEST_ENV_NUMBER'] : ENV['TEST_ENV_NUMBER'] %>.xml

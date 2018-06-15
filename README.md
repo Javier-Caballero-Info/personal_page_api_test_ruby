@@ -91,7 +91,7 @@ WRONG_PASSWORD=wrong
 ## Run test
 
 ```Bash
-rspec spec/*_spec.rb
+rspec spec/*_spec.rb --format documentation --format RspecJunitFormatter --out report.xml
 ```
 
 ## Build
@@ -107,7 +107,9 @@ To run the server on a Docker container, please execute the following from the r
 ```bash
 docker build -t personal_page_api_test_ruby .
 ```
+ 
 ### Starting up a container
+
 ```bash
 docker run -p 3000:3000 -d \
 -e JWT_SECRET_KEY="jwt-secret-string" \
@@ -119,8 +121,35 @@ docker run -p 3000:3000 -d \
 -e RIGHT_PASSWORD="admin" \
 -e WRONG_USERNAME="wrong" \
 -e WRONG_PASSWORD="wrong" \
+--name api_test_ruby \
 personal_page_api_test_ruby
 ```
+
+```bash
+# Run the tests
+docker exec -t api_test_ruby sh -c "rspec spec/*_spec.rb --format documentation --format RspecJunitFormatter --out report.xml"
+```
+
+```bash
+# Run the tests
+docker exec -t api_test_ruby sh -c "parallel_test  -t rspec -n 10 --first-is-1  spec/*_spec.rb"
+```
+
+```bash
+# Create HTML report
+docker exec -t api_test_ruby sh -c "xunit-viewer --results=./tmp  --output=report.html --title='API Test Results - Ruby'"
+```
+
+```bash
+# Export Tests Results: 
+docker cp api_test_ruby:/usr/src/app/report.html "$WORKSPACE"/report.html
+```
+
+```bash
+# Export Tests Results: 
+docker cp api_test_ruby:/usr/src/app/report.xml "$WORKSPACE"/report.xml
+```
+
 ## Contributing
 
 Contributions welcome! See the  [Contributing Guide](https://github.com/Javier-Caballero-Info/personal_page_api_test_ruby/blob/master/CONTRIBUTING.md).
